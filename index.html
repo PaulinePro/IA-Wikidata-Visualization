@@ -18,33 +18,918 @@
 </head>
 <body>
     <h1>Interactive Hackerspace Map</h1>
+    <p>Cette carte interactive montre les hackerspaces à travers le monde, colorés en fonction de leur date de création. Cliquez sur les points pour plus d'informations.</p>
     <div id="map"></div>
 
     <script>
-        // Example data from SPARQL query
+        // Data from the SPARQL query
         const data = [
-          {"item":"http://www.wikidata.org/entity/Q130015497","itemLabel":"Hackstub","geo":"Point(7.7286614 48.5781224)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","inception":"2012-01-01T00:00:00Z","website":"https://hackstub.eu/"},{"item":"http://www.wikidata.org/entity/Q130015497","itemLabel":"Hackstub","geo":"Point(7.7286614 48.5781224)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","inception":"2012-01-01T00:00:00Z","website":"https://hackstub.eu/home/en"},{"item":"http://www.wikidata.org/entity/Q131451039","itemLabel":"backspace","geo":"Point(10.8926287 49.9018897)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2011-10-23T00:00:00Z","website":"https://www.hackerspace-bamberg.de/"},{"item":"http://www.wikidata.org/entity/Q129983109","itemLabel":"Le BIB","geo":"Point(3.85273 43.58599)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","website":"https://lebib.org/"},{"item":"http://www.wikidata.org/entity/Q129982628","itemLabel":"Laboratoire Ouvert Lyonnais","geo":"Point(4.837236666 45.773249444)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","inception":"2011-01-01T00:00:00Z","website":"https://labolyon.fr/"},{"item":"http://www.wikidata.org/entity/Q131107915","itemLabel":"Chaos Computer Club Hansestadt Hamburg","geo":"Point(9.9445404 53.5585405)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://hamburg.ccc.de/"},{"item":"http://www.wikidata.org/entity/Q129983874","itemLabel":"/tmp/lab","geo":"Point(2.4112338 48.7549959)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","website":"https://www.tmplab.org"},{"item":"http://www.wikidata.org/entity/Q129984884","itemLabel":"Labomedia","geo":"Point(1.9137456 47.9005296)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","website":"https://labomedia.org/"},{"item":"http://www.wikidata.org/entity/Q129984457","itemLabel":"Tetalab","geo":"Point(1.43311 43.62211)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","website":"https://www.tetalab.org/"},{"item":"http://www.wikidata.org/entity/Q6670461","itemLabel":"London Hackspace","geo":"Point(-0.2900229 51.5539268)","country":"http://www.wikidata.org/entity/Q145","countryLabel":"Royaume-Uni","inception":"2009-01-01T00:00:00Z","website":"http://london.hackspace.org.uk/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/London%20Hackspace%20Workshop.JPG"},{"item":"http://www.wikidata.org/entity/Q122999915","itemLabel":"Limehouse Labs","geo":"Point(-0.033919 51.5120985)","country":"http://www.wikidata.org/entity/Q145","countryLabel":"Royaume-Uni","website":"https://www.limehouselabs.org/"},{"item":"http://www.wikidata.org/entity/Q55496248","itemLabel":"Open Garage","geo":"Point(4.471978 51.198497)","country":"http://www.wikidata.org/entity/Q31","countryLabel":"Belgique","website":"https://www.meetup.com/OpenGarage/"},{"item":"http://www.wikidata.org/entity/Q24534662","itemLabel":"Mothership HackerMoms","geo":"Point(-122.271748 37.848936)","country":"http://www.wikidata.org/entity/Q30","countryLabel":"États-Unis","inception":"2011-01-01T00:00:00Z","website":"http://mothership.hackermoms.org"},{"item":"http://www.wikidata.org/entity/Q43233138","itemLabel":"Freies Labor","geo":"Point(9.978318888 52.168954722)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://www.freieslabor.org/"},{"item":"http://www.wikidata.org/entity/Q876514","itemLabel":"Metalab","geo":"Point(16.35617494 48.20941009)","country":"http://www.wikidata.org/entity/Q40","countryLabel":"Autriche","inception":"2006-04-01T00:00:00Z","website":"https://metalab.at/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Metalab-Eingang.jpg"},{"item":"http://www.wikidata.org/entity/Q42717601","itemLabel":"Chaos Computer Club Berlin","geo":"Point(13.38261 52.52194)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"1995-01-01T00:00:00Z","website":"https://berlin.ccc.de","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Chaos%20Computer%20Club%20Door%20Bell%20%285801386797%29.jpg"},{"item":"http://www.wikidata.org/entity/Q42791199","itemLabel":"fnordeingang","geo":"Point(6.6925 51.186111111)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2009-01-01T00:00:00Z","website":"https://fnordeingang.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/FNordeingang%20front.jpg"},{"item":"http://www.wikidata.org/entity/Q43215380","itemLabel":"Stratum 0","geo":"Point(10.5211247 52.2785658)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2011-07-23T00:00:00Z","website":"https://stratum0.org/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Stratum%200%20Warpcore%20frickelraum.jpg"},{"item":"http://www.wikidata.org/entity/Q47790744","itemLabel":"Segmentation Vault","geo":"Point(15.62444 48.205)","country":"http://www.wikidata.org/entity/Q40","countryLabel":"Autriche","inception":"2017-01-13T00:00:00Z","website":"https://segvault.space/"},{"item":"http://www.wikidata.org/entity/Q121437617","itemLabel":"Q121437617","geo":"Point(12.12447 54.08734)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://hack-hro.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Hackspace%20Rostock.jpg"},{"item":"http://www.wikidata.org/entity/Q63729340","itemLabel":"see-base","geo":"Point(9.199606776 47.772509881)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2015-09-01T00:00:00Z","website":"https://see-base.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Hackerspace%20see-base.jpg"},{"item":"http://www.wikidata.org/entity/Q48647174","itemLabel":"Turbine Brunnen","geo":"Point(8.6055 46.994777777)","country":"http://www.wikidata.org/entity/Q39","countryLabel":"Suisse","website":"http://www.turbine-brunnen.ch"},{"item":"http://www.wikidata.org/entity/Q15276608","itemLabel":"shackspace","geo":"Point(9.23555556 48.77722222)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2009-01-01T00:00:00Z","website":"https://www.shackspace.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/WP15%20Stuttgart%20Shackspace%201.jpg"},{"item":"http://www.wikidata.org/entity/Q110270702","itemLabel":"Malino hackerspace in Minsk","geo":"Point(27.47797 53.8729)","country":"http://www.wikidata.org/entity/Q184","countryLabel":"Biélorussie","inception":"2019-03-01T00:00:00Z","website":"https://hackerspace.by","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Team%20work%20in%20hackerspace.JPG"},{"item":"http://www.wikidata.org/entity/Q110270702","itemLabel":"Malino hackerspace in Minsk","geo":"Point(27.47797 53.8729)","country":"http://www.wikidata.org/entity/Q184","countryLabel":"Biélorussie","inception":"2019-03-01T00:00:00Z","website":"https://hackerspace.by","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Work%20place%20-%20creative%20order.JPG"},{"item":"http://www.wikidata.org/entity/Q10288360","itemLabel":"Garoa Hacker Clube","geo":"Point(-46.699722222 -23.569444444)","country":"http://www.wikidata.org/entity/Q155","countryLabel":"Brésil","inception":"2011-02-20T00:00:00Z","website":"https://garoa.net.br","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Wikiday%20no%20Garoa%20Hackerspace03.JPG"},{"item":"http://www.wikidata.org/entity/Q86857152","itemLabel":"nobreakspace","geo":"Point(10.67133 53.86875)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://chaotikum.org/nobreakspace/"},{"item":"http://www.wikidata.org/entity/Q43139596","itemLabel":"Munich Maker Lab","geo":"Point(11.550416666 48.158861111)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2014-02-01T00:00:00Z","website":"https://munichmakerlab.de"},{"item":"http://www.wikidata.org/entity/Q110611209","itemLabel":"Zentrum für Technikkultur Landau e.V.","geo":"Point(8.128648153 49.193468767)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://ztl.space/"},{"item":"http://www.wikidata.org/entity/Q62108932","itemLabel":"Polytechnischer Werkraum","geo":"Point(14.8043893 50.8974715)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2014-05-23T00:00:00Z","website":"https://werkraum.freiraumzittau.de/"},{"item":"http://www.wikidata.org/entity/Q63727255","itemLabel":"Toolbox Bodensee","geo":"Point(9.3995668 47.71240915)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2014-03-21T00:00:00Z","website":"https://toolbox-bodensee.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Toolbox-basteln.jpg"},{"item":"http://www.wikidata.org/entity/Q63727255","itemLabel":"Toolbox Bodensee","geo":"Point(9.3995668 47.71240915)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2014-03-21T00:00:00Z","website":"https://toolbox-bodensee.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Toolbox.jpg"},{"item":"http://www.wikidata.org/entity/Q63727255","itemLabel":"Toolbox Bodensee","geo":"Point(9.3995668 47.71240915)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2014-03-21T00:00:00Z","website":"https://toolbox-bodensee.de/en/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Toolbox-basteln.jpg"},{"item":"http://www.wikidata.org/entity/Q63727255","itemLabel":"Toolbox Bodensee","geo":"Point(9.3995668 47.71240915)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2014-03-21T00:00:00Z","website":"https://toolbox-bodensee.de/en/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Toolbox.jpg"},{"item":"http://www.wikidata.org/entity/Q63727255","itemLabel":"Toolbox Bodensee","geo":"Point(9.3995668 47.71240915)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2014-03-21T00:00:00Z","website":"https://toolbox-bodensee.de/sxu/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Toolbox-basteln.jpg"},{"item":"http://www.wikidata.org/entity/Q63727255","itemLabel":"Toolbox Bodensee","geo":"Point(9.3995668 47.71240915)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2014-03-21T00:00:00Z","website":"https://toolbox-bodensee.de/sxu/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Toolbox.jpg"},{"item":"http://www.wikidata.org/entity/Q48708415","itemLabel":"Heart of Code","geo":"Point(13.423823 52.503508)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2016-01-01T00:00:00Z","website":"http://heartofcode.org/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/The%20dome%20of%20Heart%20of%20Code%20at%20the%2035C3.jpg"},{"item":"http://www.wikidata.org/entity/Q61752245","itemLabel":"Mozilla Community Space Taipei","geo":"Point(121.5322175 25.0440809)","country":"http://www.wikidata.org/entity/Q865","countryLabel":"Taïwan","inception":"2014-07-01T00:00:00Z","website":"https://moztw.org/space/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/OSM%20x%20Wikidata%20Taipei%20Meetup%20No.7.jpg"},{"item":"http://www.wikidata.org/entity/Q111143490","itemLabel":"57North Hacklab","geo":"Point(-2.1130448 57.1793321)","country":"http://www.wikidata.org/entity/Q145","countryLabel":"Royaume-Uni","inception":"2013-09-01T00:00:00Z","website":"https://www.57north.org.uk/"},{"item":"http://www.wikidata.org/entity/Q20990920","itemLabel":"Hackerspace Rancho Electrónico","geo":"Point(-99.14103 19.40864)","country":"http://www.wikidata.org/entity/Q96","countryLabel":"Mexique","website":"http://ranchoelectronico.org"},{"item":"http://www.wikidata.org/entity/Q43140656","itemLabel":"Chaos Computer Club Munich","geo":"Point(11.560805555 48.153694444)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2008-06-01T00:00:00Z","website":"https://muc.ccc.de"},{"item":"http://www.wikidata.org/entity/Q43296185","itemLabel":"Hacklabor","geo":"Point(11.4183 53.6011)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2016-02-26T00:00:00Z","website":"https://hacklabor.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Hacklabor%20zusehen%20durchs%20Fenster.jpg"},{"item":"http://www.wikidata.org/entity/Q62082674","itemLabel":"Olabi","geo":"Point(-43.19576 -22.95249)","country":"http://www.wikidata.org/entity/Q155","countryLabel":"Brésil","website":"https://www.olabi.org.br/"},{"item":"http://www.wikidata.org/entity/Q66818728","itemLabel":"SDG Solution Space","geo":"Point(6.14739 46.22064)","country":"http://www.wikidata.org/entity/Q39","countryLabel":"Suisse","website":"https://sdgsolutionspace.org/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Mapathon%20Missing%20Maps%20au%20SDG%20Solution%20Space%20%28Gen%C3%A8ve%29%20en%20mars%202023.JPG"},{"item":"http://www.wikidata.org/entity/Q18205951","itemLabel":"Chattanooga Public Library","geo":"Point(-85.31081 35.04436)","country":"http://www.wikidata.org/entity/Q30","countryLabel":"États-Unis","inception":"1905-01-01T00:00:00Z","website":"http://chattlibrary.org","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Chattanooga%20Public%20Library.jpg"},{"item":"http://www.wikidata.org/entity/Q63073305","itemLabel":"ACME Labs","geo":"Point(8.546111111 52.020277777)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2019-03-23T00:00:00Z","website":"https://acmelabs.space/"},{"item":"http://www.wikidata.org/entity/Q110270702","itemLabel":"Malino hackerspace in Minsk","geo":"Point(27.47797 53.8729)","country":"http://www.wikidata.org/entity/Q184","countryLabel":"Biélorussie","inception":"2019-03-01T00:00:00Z","website":"https://hackerspace.by","image":"http://commons.wikimedia.org/wiki/Special:FilePath/%D0%9C%D0%B0%D0%BB%D0%B8%D0%BD%D0%BE%D0%B2%D1%8B%D0%B9%20%D0%A5%D0%B0%D0%BA%D0%B5%D1%80%D1%81%D0%BF%D0%B5%D0%B9%D1%81%20%D0%B2%20%D0%9C%D0%B8%D0%BD%D1%81%D0%BA%D0%B5%2C%20%D0%BB%D0%B5%D0%BA%D1%86%D0%B8%D1%8F%20%D0%BF%D1%80%D0%BE%20%D0%92%D0%B8%D0%BA%D0%B8%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5.jpg"},{"item":"http://www.wikidata.org/entity/Q268251","itemLabel":"Kiberpipa","geo":"Point(14.503798 46.056184)","country":"http://www.wikidata.org/entity/Q215","countryLabel":"Slovénie","inception":"2001-01-01T00:00:00Z","website":"http://www.kiberpipa.org"},{"item":"http://www.wikidata.org/entity/Q265688","itemLabel":"c-base","geo":"Point(13.420625925 52.512851826)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"1995-11-16T00:00:00Z","website":"https://www.c-base.org/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Wikimedia%20Conference%20Berlin%20-%20Developer%20meeting%20%287739%29.jpg"},{"item":"http://www.wikidata.org/entity/Q111516606","itemLabel":"LAB01","geo":"Point(5.345233534 45.954479834)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","website":"http://www.lab01.fr/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/La%20porte%20du%20LAB01%20en%20avril%202022.jpg"},{"item":"http://www.wikidata.org/entity/Q43020369","itemLabel":"Hackerspace Bremen","geo":"Point(8.805744 53.081957)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2011-11-09T00:00:00Z","website":"https://www.hackerspace-bremen.de/"},{"item":"http://www.wikidata.org/entity/Q116817058","itemLabel":"brmlab","geo":"Point(14.48032 50.08346)","country":"http://www.wikidata.org/entity/Q213","countryLabel":"Tchéquie","website":"https://brmlab.cz/"},{"item":"http://www.wikidata.org/entity/Q67371330","itemLabel":"Association for Development of ‘do-it-yourself’ Culture – Makerspace","geo":"Point(15.955108915 45.793226903)","country":"http://www.wikidata.org/entity/Q224","countryLabel":"Croatie","inception":"2011-01-01T00:00:00Z","website":"https://radiona.org/"},{"item":"http://www.wikidata.org/entity/Q61478645","itemLabel":"Chaostreff Flensburg","geo":"Point(9.42351 54.8045)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2015-01-01T00:00:00Z","website":"https://chaostreff-flensburg.de"},{"item":"http://www.wikidata.org/entity/Q12330334","itemLabel":"Open Space Aarhus","geo":"Point(10.1885734 56.1861506)","country":"http://www.wikidata.org/entity/Q35","countryLabel":"Danemark","inception":"2010-01-01T00:00:00Z","website":"https://osaa.dk"},{"item":"http://www.wikidata.org/entity/Q42839700","itemLabel":"das Labor","geo":"Point(7.208597 51.480858)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2005-01-01T00:00:00Z","website":"https://das-labor.org/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Bochum%20das%20Labor%2006.jpg"},{"item":"http://www.wikidata.org/entity/Q64168592","itemLabel":"laboratoire ouvert villeurbannais","geo":"Point(4.877765 45.756335)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","website":"https://labovilleurbanne.fr","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Le%20LOV%20%C3%A0%20Villeurbanne%20%28mai%202019%29.jpg"},{"item":"http://www.wikidata.org/entity/Q45214096","itemLabel":"/usr/space","geo":"Point(16.21173 47.92305)","country":"http://www.wikidata.org/entity/Q40","countryLabel":"Autriche","inception":"2017-05-01T00:00:00Z","website":"https://usrspace.at/"},{"item":"http://www.wikidata.org/entity/Q17195802","itemLabel":"Labitat","geo":"Point(12.5455 55.6763)","country":"http://www.wikidata.org/entity/Q35","countryLabel":"Danemark","inception":"2009-01-01T00:00:00Z"},{"item":"http://www.wikidata.org/entity/Q43194112","itemLabel":"Chaostreff Dortmund","geo":"Point(7.464944444 51.527611111)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://www.chaostreff-dortmund.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Ctdo%20DSC03785%20smial%20wp.jpg"},{"item":"http://www.wikidata.org/entity/Q110293084","itemLabel":"Green hackerspace in Minsk","geo":"Point(27.5977514 53.9430181)","country":"http://www.wikidata.org/entity/Q184","countryLabel":"Biélorussie","inception":"2014-05-01T00:00:00Z","website":"https://hackerspace.by/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Common%20atmosphere%20in%20hackerspace.JPG"},{"item":"http://www.wikidata.org/entity/Q110293084","itemLabel":"Green hackerspace in Minsk","geo":"Point(27.5977514 53.9430181)","country":"http://www.wikidata.org/entity/Q184","countryLabel":"Biélorussie","inception":"2014-05-01T00:00:00Z","website":"https://hackerspace.by/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Drone%20prototype.JPG"},{"item":"http://www.wikidata.org/entity/Q110293084","itemLabel":"Green hackerspace in Minsk","geo":"Point(27.5977514 53.9430181)","country":"http://www.wikidata.org/entity/Q184","countryLabel":"Biélorussie","inception":"2014-05-01T00:00:00Z","website":"https://hackerspace.by/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Lvee%20guy%20in%20hackerspace.JPG"},{"item":"http://www.wikidata.org/entity/Q97265498","itemLabel":"Omega verksted","geo":"Point(10.402047222 63.418611111)","country":"http://www.wikidata.org/entity/Q20","countryLabel":"Norvège","website":"https://omegav.no/"},{"item":"http://www.wikidata.org/entity/Q42726392","itemLabel":"DevLoL","geo":"Point(14.283852 48.305825)","country":"http://www.wikidata.org/entity/Q40","countryLabel":"Autriche","inception":"2012-10-18T00:00:00Z","website":"https://devlol.org/"},{"item":"http://www.wikidata.org/entity/Q42726392","itemLabel":"DevLoL","geo":"Point(14.283852 48.305825)","country":"http://www.wikidata.org/entity/Q40","countryLabel":"Autriche","inception":"2012-10-18T00:00:00Z","website":"https://www.devlol.org/"},{"item":"http://www.wikidata.org/entity/Q44747277","itemLabel":"realraum","geo":"Point(15.450611111 47.065611111)","country":"http://www.wikidata.org/entity/Q40","countryLabel":"Autriche","inception":"2007-03-01T00:00:00Z","website":"https://r3.at","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Electronics%20Lab%20in%20realraum.jpg"},{"item":"http://www.wikidata.org/entity/Q44747277","itemLabel":"realraum","geo":"Point(15.450611111 47.065611111)","country":"http://www.wikidata.org/entity/Q40","countryLabel":"Autriche","inception":"2007-03-01T00:00:00Z","website":"https://realraum.at","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Electronics%20Lab%20in%20realraum.jpg"},{"item":"http://www.wikidata.org/entity/Q44747277","itemLabel":"realraum","geo":"Point(15.450611111 47.065611111)","country":"http://www.wikidata.org/entity/Q40","countryLabel":"Autriche","inception":"2007-03-01T00:00:00Z","website":"https://wp.realraum.at/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Electronics%20Lab%20in%20realraum.jpg"},{"item":"http://www.wikidata.org/entity/Q50329388","itemLabel":"Makerspace Bonn","geo":"Point(7.14515 50.6981538)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2018-03-03T00:00:00Z","website":"https://makerspacebonn.de/"},{"item":"http://www.wikidata.org/entity/Q62117786","itemLabel":"Coredump","geo":"Point(8.833906388 47.225086388)","country":"http://www.wikidata.org/entity/Q39","countryLabel":"Suisse","inception":"2013-08-26T00:00:00Z","website":"https://www.coredump.ch/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Coredump%20Makerspace%20Platz.jpg"},{"item":"http://www.wikidata.org/entity/Q62117786","itemLabel":"Coredump","geo":"Point(8.833906388 47.225086388)","country":"http://www.wikidata.org/entity/Q39","countryLabel":"Suisse","inception":"2013-08-26T00:00:00Z","website":"https://www.coredump.ch/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Entrance%20of%20Coredump%20hackerspace-makerspace.jpg"},{"item":"http://www.wikidata.org/entity/Q118395553","itemLabel":"Q118395553","geo":"Point(120.3803 22.76182)","country":"http://www.wikidata.org/entity/Q865","countryLabel":"Taïwan"},{"item":"http://www.wikidata.org/entity/Q110863132","itemLabel":"h´eck","geo":"Point(7.03575 49.27928)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://www.hacksaar.de/"},{"item":"http://www.wikidata.org/entity/Q20112204","itemLabel":"Errors Party","geo":"Point(5.225197222 60.523822222)","country":"http://www.wikidata.org/entity/Q20","countryLabel":"Norvège","inception":"1994-01-01T00:00:00Z","website":"https://errorsparty.no/"},{"item":"http://www.wikidata.org/entity/Q42748136","itemLabel":"AfRA","geo":"Point(13.4961132 52.5082304)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2013-06-29T00:00:00Z","website":"https://www.afra-berlin.de","image":"http://commons.wikimedia.org/wiki/Special:FilePath/AfRA%20%28Hackerspace%29%20in%20der%20Margaretenstra%C3%9Fe%2030%20in%20Berlin-Lichtenberg.jpg"},{"item":"http://www.wikidata.org/entity/Q5637246","itemLabel":"Hacker Dojo","geo":"Point(-122.049166666 37.396111111)","country":"http://www.wikidata.org/entity/Q30","countryLabel":"États-Unis","inception":"2009-08-17T00:00:00Z","website":"http://www.hackerdojo.com/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Dojo855Front.jpg"},{"item":"http://www.wikidata.org/entity/Q6956054","itemLabel":"NYC Resistor","geo":"Point(-73.9816 40.6837)","country":"http://www.wikidata.org/entity/Q30","countryLabel":"États-Unis","inception":"2008-01-01T00:00:00Z","website":"http://nycresistor.com/"},{"item":"http://www.wikidata.org/entity/Q62113580","itemLabel":"Eigenbaukombinat","geo":"Point(11.9923 51.4799)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://www.eigenbaukombinat.de/"},{"item":"http://www.wikidata.org/entity/Q2133283","itemLabel":"RaumZeitLabor","geo":"Point(8.5206511 49.5074245)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2010-04-25T00:00:00Z","website":"https://raumzeitlabor.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/RaumZeitLabor%20Stairs.jpg"},{"item":"http://www.wikidata.org/entity/Q7670966","itemLabel":"TOG","geo":"Point(-6.34605 53.33013)","country":"http://www.wikidata.org/entity/Q27","countryLabel":"Irlande","inception":"2009-01-21T00:00:00Z","website":"http://www.tog.ie"},{"item":"http://www.wikidata.org/entity/Q67371330","itemLabel":"Association for Development of ‘do-it-yourself’ Culture – Makerspace","geo":"Point(15.882048148 45.813776537)","country":"http://www.wikidata.org/entity/Q224","countryLabel":"Croatie","inception":"2011-01-01T00:00:00Z","website":"https://radiona.org/"},{"item":"http://www.wikidata.org/entity/Q16826280","itemLabel":"Chaosdorf","geo":"Point(6.799648 51.212627)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2001-04-24T00:00:00Z","website":"https://chaosdorf.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/D%C3%BCsseldorf%2C%20H%C3%BCttenstra%C3%9Fe%2025%2C%20CCC%20Chaosdorf%2025%2C%20M%C3%A4rz%202015%20%281%29.jpg"},{"item":"http://www.wikidata.org/entity/Q42665273","itemLabel":"Chaos Computer Club Dresden","geo":"Point(13.72857 51.08108)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2005-08-30T00:00:00Z","website":"https://c3d2.de/"},{"item":"http://www.wikidata.org/entity/Q125236151","itemLabel":"U.10 Makerspace","geo":"Point(8.3563928 49.6277526)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2024-02-22T00:00:00Z","website":"https://u10.makercloud.de","image":"http://commons.wikimedia.org/wiki/Special:FilePath/U.10%20Makerspace%20in%20Worms%20Logo.svg"},{"item":"http://www.wikidata.org/entity/Q46008981","itemLabel":"Krautspace","geo":"Point(11.5825822 50.9292094)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2012-12-01T00:00:00Z","website":"https://kraut.space"},{"item":"http://www.wikidata.org/entity/Q48914241","itemLabel":"CoMakingSpace","geo":"Point(8.64622 49.40831)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2017-08-08T00:00:00Z","website":"https://www.comaking.space/"},{"item":"http://www.wikidata.org/entity/Q48914241","itemLabel":"CoMakingSpace","geo":"Point(8.64622 49.40831)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2017-08-08T00:00:00Z","website":"https://www.comakingspace.org/"},{"item":"http://www.wikidata.org/entity/Q63968426","itemLabel":"S P A C E","geo":"Point(10.9351 50.68967)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://ilmspace.de"},{"item":"http://www.wikidata.org/entity/Q109317788","itemLabel":"HackBo","geo":"Point(-74.06589 4.63137)","country":"http://www.wikidata.org/entity/Q739","countryLabel":"Colombie","inception":"2010-12-09T00:00:00Z","website":"https://hackbo.org"},{"item":"http://www.wikidata.org/entity/Q4672455","itemLabel":"Access Space","geo":"Point(-1.46762 53.37608)","country":"http://www.wikidata.org/entity/Q145","countryLabel":"Royaume-Uni"},{"item":"http://www.wikidata.org/entity/Q116816630","itemLabel":"base48","geo":"Point(16.59555 49.224238888)","country":"http://www.wikidata.org/entity/Q213","countryLabel":"Tchéquie","website":"https://base48.cz/"},{"item":"http://www.wikidata.org/entity/Q27945856","itemLabel":"temporaerhaus","geo":"Point(10.0019903 48.3962895)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2016-07-01T00:00:00Z","website":"https://temporaerhaus.de/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Tempor%C3%A4rhaus%20-%20Schaufenster.jpg"},{"item":"http://www.wikidata.org/entity/Q59608230","itemLabel":"UN-Hack-Bar","geo":"Point(7.673178851 51.53784565)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2018-01-01T00:00:00Z","website":"https://www.un-hack-bar.de/"},{"item":"http://www.wikidata.org/entity/Q63073064","itemLabel":"z-Labor","geo":"Point(12.48 50.722777777)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2015-09-20T00:00:00Z","website":"https://www.z-labor.space/"},{"item":"http://www.wikidata.org/entity/Q42822003","itemLabel":"Chaospott","geo":"Point(7.0249425 51.4385004)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2010-09-15T00:00:00Z","website":"https://www.chaospott.de","image":"http://commons.wikimedia.org/wiki/Special:FilePath/C3e-2016-og-flur-01.jpg"},{"item":"http://www.wikidata.org/entity/Q62117786","itemLabel":"Coredump","geo":"Point(8.833906388 47.225086388)","country":"http://www.wikidata.org/entity/Q39","countryLabel":"Suisse","inception":"2013-08-26T00:00:00Z","website":"https://www.coredump.ch/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Soldering%20stations%20at%20Coredump%20Hackerspace.jpg"},{"item":"http://www.wikidata.org/entity/Q126089757","itemLabel":"SLUB Makerspace","geo":"Point(13.7382 51.03002)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","website":"https://www.slub-dresden.de/mitmachen/slub-makerspace","image":"http://commons.wikimedia.org/wiki/Special:FilePath/2016%2009%20UJ%20Meet%20Up%20Makerspace%20%28c%29%20Lukas%20Boxberger.jpg"},{"item":"http://www.wikidata.org/entity/Q42721163","itemLabel":"X-Hain","geo":"Point(13.4494645 52.5128128)","country":"http://www.wikidata.org/entity/Q183","countryLabel":"Allemagne","inception":"2016-05-01T00:00:00Z","website":"https://x-hain.de"},{"item":"http://www.wikidata.org/entity/Q124372692","itemLabel":"Indulo","geo":"Point(4.9155 45.76152)","country":"http://www.wikidata.org/entity/Q142","countryLabel":"France","website":"https://indulo.universite-lyon.fr/","image":"http://commons.wikimedia.org/wiki/Special:FilePath/Indulo%20%C3%A0%20Villeurbanne%20en%20janvier%202024.JPG"},{"item":"http://www.wikidata.org/entity/Q47544826","itemLabel":"IT-Syndikat","geo":"Point(11.396111111 47.2575)","country":"http://www.wikidata.org/entity/Q40","countryLabel":"Autriche","inception":"2010-10-01T00:00:00Z","website":"https://it-syndikat.org/"}
-            // Add more data here...
+           const data = [
+    {
+        itemLabel: "Hackstub",
+        geo: [48.5781224, 7.7286614],
+        countryLabel: "France",
+        inception: "2012-01-01",
+        website: "https://hackstub.eu/",
+    },
+    {
+        itemLabel: "Hackstub",
+        geo: [48.5781224, 7.7286614],
+        countryLabel: "France",
+        inception: "2012-01-01",
+        website: "https://hackstub.eu/home/en",
+    },
+    {
+        itemLabel: "backspace",
+        geo: [49.9018897, 10.8926287],
+        countryLabel: "Allemagne",
+        inception: "2011-10-23",
+        website: "https://www.hackerspace-bamberg.de/",
+    },
+    {
+        itemLabel: "Le BIB",
+        geo: [43.58599, 3.85273],
+        countryLabel: "France",
+        website: "https://lebib.org/",
+    },
+    {
+        itemLabel: "Laboratoire Ouvert Lyonnais",
+        geo: [45.773249444, 4.837236666],
+        countryLabel: "France",
+        inception: "2011-01-01",
+        website: "https://labolyon.fr/",
+    },
+    {
+        itemLabel: "Chaos Computer Club Hansestadt Hamburg",
+        geo: [53.5585405, 9.9445404],
+        countryLabel: "Allemagne",
+        website: "https://hamburg.ccc.de/",
+    },
+    {
+        itemLabel: "/tmp/lab",
+        geo: [48.7549959, 2.4112338],
+        countryLabel: "France",
+        website: "https://www.tmplab.org",
+    },
+    {
+        itemLabel: "Labomedia",
+        geo: [47.9005296, 1.9137456],
+        countryLabel: "France",
+        website: "https://labomedia.org/",
+    },
+    {
+        itemLabel: "Tetalab",
+        geo: [43.62211, 1.43311],
+        countryLabel: "France",
+        website: "https://www.tetalab.org/",
+    },
+    {
+        itemLabel: "London Hackspace",
+        geo: [51.5539268, -0.2900229],
+        countryLabel: "Royaume-Uni",
+        inception: "2009-01-01",
+        website: "http://london.hackspace.org.uk/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/London%20Hackspace%20Workshop.JPG",
+    },
+     {
+        itemLabel: "Limehouse Labs",
+        geo: [51.5120985, -0.033919],
+        countryLabel: "Royaume-Uni",
+        website: "https://www.limehouselabs.org/"
+    },
+    {
+        itemLabel: "Open Garage",
+        geo: [51.198497, 4.471978],
+        countryLabel: "Belgique",
+        website: "https://www.meetup.com/OpenGarage/"
+    },
+    {
+        itemLabel: "Mothership HackerMoms",
+        geo: [37.848936, -122.271748],
+        countryLabel: "États-Unis",
+        inception: "2011-01-01",
+        website: "http://mothership.hackermoms.org"
+    },
+    {
+        itemLabel: "Freies Labor",
+        geo: [52.168954722, 9.978318888],
+        countryLabel: "Allemagne",
+        website: "https://www.freieslabor.org/"
+    },
+    {
+        itemLabel: "Metalab",
+        geo: [48.20941009, 16.35617494],
+        countryLabel: "Autriche",
+        inception: "2006-04-01",
+        website: "https://metalab.at/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Metalab-Eingang.jpg"
+    },
+    {
+        itemLabel: "Chaos Computer Club Berlin",
+        geo: [52.52194, 13.38261],
+        countryLabel: "Allemagne",
+        inception: "1995-01-01",
+        website: "https://berlin.ccc.de",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Chaos%20Computer%20Club%20Door%20Bell%20%285801386797%29.jpg"
+    },
+    {
+        itemLabel: "fnordeingang",
+        geo: [51.186111111, 6.6925],
+        countryLabel: "Allemagne",
+        inception: "2009-01-01",
+        website: "https://fnordeingang.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/FNordeingang%20front.jpg"
+    },
+    {
+        itemLabel: "Stratum 0",
+        geo: [52.2785658, 10.5211247],
+        countryLabel: "Allemagne",
+        inception: "2011-07-23",
+        website: "https://stratum0.org/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Stratum%200%20Warpcore%20frickelraum.jpg"
+    },
+    {
+        itemLabel: "Segmentation Vault",
+        geo: [48.205, 15.62444],
+        countryLabel: "Autriche",
+        inception: "2017-01-13",
+        website: "https://segvault.space/"
+    },
+    {
+        itemLabel: "Q121437617",
+        geo: [54.08734, 12.12447],
+        countryLabel: "Allemagne",
+        website: "https://hack-hro.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Hackspace%20Rostock.jpg"
+    },
+    {
+        itemLabel: "see-base",
+        geo: [47.772509881, 9.199606776],
+        countryLabel: "Allemagne",
+        inception: "2015-09-01",
+        website: "https://see-base.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Hackerspace%20see-base.jpg"
+    }
+    {
+        itemLabel: "Turbine Brunnen",
+        geo: [46.994777777, 8.6055],
+        countryLabel: "Suisse",
+        website: "http://www.turbine-brunnen.ch"
+    },
+    {
+        itemLabel: "shackspace",
+        geo: [48.77722222, 9.23555556],
+        countryLabel: "Allemagne",
+        inception: "2009-01-01",
+        website: "https://www.shackspace.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/WP15%20Stuttgart%20Shackspace%201.jpg"
+    },
+    {
+        itemLabel: "Malino hackerspace in Minsk",
+        geo: [53.8729, 27.47797],
+        countryLabel: "Biélorussie",
+        inception: "2019-03-01",
+        website: "https://hackerspace.by",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Team%20work%20in%20hackerspace.JPG"
+    },
+    {
+        itemLabel: "Garoa Hacker Clube",
+        geo: [-23.569444444, -46.699722222],
+        countryLabel: "Brésil",
+        inception: "2011-02-20",
+        website: "https://garoa.net.br",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Wikiday%20no%20Garoa%20Hackerspace03.JPG"
+    },
+    {
+        itemLabel: "nobreakspace",
+        geo: [53.86875, 10.67133],
+        countryLabel: "Allemagne",
+        website: "https://chaotikum.org/nobreakspace/"
+    },
+    {
+        itemLabel: "Munich Maker Lab",
+        geo: [48.158861111, 11.550416666],
+        countryLabel: "Allemagne",
+        inception: "2014-02-01",
+        website: "https://munichmakerlab.de"
+    },
+    {
+        itemLabel: "Zentrum für Technikkultur Landau e.V.",
+        geo: [49.193468767, 8.128648153],
+        countryLabel: "Allemagne",
+        website: "https://ztl.space/"
+    },
+    {
+        itemLabel: "Polytechnischer Werkraum",
+        geo: [50.8974715, 14.8043893],
+        countryLabel: "Allemagne",
+        inception: "2014-05-23",
+        website: "https://werkraum.freiraumzittau.de/"
+    },
+    {
+        itemLabel: "Toolbox Bodensee",
+        geo: [47.71240915, 9.3995668],
+        countryLabel: "Allemagne",
+        inception: "2014-03-21",
+        website: "https://toolbox-bodensee.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Toolbox-basteln.jpg"
+    },
+    {
+        itemLabel: "Heart of Code",
+        geo: [52.503508, 13.423823],
+        countryLabel: "Allemagne",
+        inception: "2016-01-01",
+        website: "http://heartofcode.org/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/The%20dome%20of%20Heart%20of%20Code%20at%20the%2035C3.jpg"
+    },
+    {
+        itemLabel: "Mozilla Community Space Taipei",
+        geo: [25.0440809, 121.5322175],
+        countryLabel: "Taïwan",
+        inception: "2014-07-01",
+        website: "https://moztw.org/space/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/OSM%20x%20Wikidata%20Taipei%20Meetup%20No.7.jpg"
+    },
+    {
+        itemLabel: "57North Hacklab",
+        geo: [57.1793321, -2.1130448],
+        countryLabel: "Royaume-Uni",
+        inception: "2013-09-01",
+        website: "https://www.57north.org.uk/"
+    },
+    {
+        itemLabel: "Hackerspace Rancho Electrónico",
+        geo: [19.40864, -99.14103],
+        countryLabel: "Mexique",
+        website: "http://ranchoelectronico.org"
+    },
+    {
+        itemLabel: "Chaos Computer Club Munich",
+        geo: [48.153694444, 11.560805555],
+        countryLabel: "Allemagne",
+        inception: "2008-06-01",
+        website: "https://muc.ccc.de"
+    },
+    {
+        itemLabel: "Hacklabor",
+        geo: [53.6011, 11.4183],
+        countryLabel: "Allemagne",
+        inception: "2016-02-26",
+        website: "https://hacklabor.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Hacklabor%20zusehen%20durchs%20Fenster.jpg"
+    },
+    {
+        itemLabel: "Olabi",
+        geo: [-22.95249, -43.19576],
+        countryLabel: "Brésil",
+        website: "https://www.olabi.org.br/"
+    },
+    {
+        itemLabel: "SDG Solution Space",
+        geo: [46.22064, 6.14739],
+        countryLabel: "Suisse",
+        website: "https://sdgsolutionspace.org/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Mapathon%20Missing%20Maps%20au%20SDG%20Solution%20Space%20%28Gen%C3%A8ve%29%20en%20mars%202023.JPG"
+    },
+    {
+        itemLabel: "Chattanooga Public Library",
+        geo: [35.04436, -85.31081],
+        countryLabel: "États-Unis",
+        inception: "1905-01-01",
+        website: "http://chattlibrary.org",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Chattanooga%20Public%20Library.jpg"
+    },
+    {
+        itemLabel: "ACME Labs",
+        geo: [52.020277777, 8.546111111],
+        countryLabel: "Allemagne",
+        inception: "2019-03-23",
+        website: "https://acmelabs.space/"
+    },
+    {
+        itemLabel: "Kiberpipa",
+        geo: [46.056184, 14.503798],
+        countryLabel: "Slovénie",
+        inception: "2001-01-01",
+        website: "http://www.kiberpipa.org"
+    },
+    {
+        itemLabel: "c-base",
+        geo: [52.512851826, 13.420625925],
+        countryLabel: "Allemagne",
+        inception: "1995-11-16",
+        website: "https://www.c-base.org/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Wikimedia%20Conference%20Berlin%20-%20Developer%20meeting%20%287739"
+    }
+     {
+        itemLabel: "LAB01",
+        geo: [45.954479834, 5.345233534],
+        countryLabel: "France",
+        website: "http://www.lab01.fr/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/La%20porte%20du%20LAB01%20en%20avril%202022.jpg"
+    },
+    {
+        itemLabel: "Hackerspace Bremen",
+        geo: [53.081957, 8.805744],
+        countryLabel: "Allemagne",
+        inception: "2011-11-09",
+        website: "https://www.hackerspace-bremen.de/"
+    },
+    {
+        itemLabel: "brmlab",
+        geo: [50.08346, 14.48032],
+        countryLabel: "Tchéquie",
+        website: "https://brmlab.cz/"
+    },
+    {
+        itemLabel: "Association for Development of ‘do-it-yourself’ Culture – Makerspace",
+        geo: [45.793226903, 15.955108915],
+        countryLabel: "Croatie",
+        inception: "2011-01-01",
+        website: "https://radiona.org/"
+    },
+    {
+        itemLabel: "Chaostreff Flensburg",
+        geo: [54.8045, 9.42351],
+        countryLabel: "Allemagne",
+        inception: "2015-01-01",
+        website: "https://chaostreff-flensburg.de"
+    },
+    {
+        itemLabel: "Open Space Aarhus",
+        geo: [56.1861506, 10.1885734],
+        countryLabel: "Danemark",
+        inception: "2010-01-01",
+        website: "https://osaa.dk"
+    },
+    {
+        itemLabel: "das Labor",
+        geo: [51.480858, 7.208597],
+        countryLabel: "Allemagne",
+        inception: "2005-01-01",
+        website: "https://das-labor.org/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Bochum%20das%20Labor%2006.jpg"
+    },
+    {
+        itemLabel: "laboratoire ouvert villeurbannais",
+        geo: [45.756335, 4.877765],
+        countryLabel: "France",
+        website: "https://labovilleurbanne.fr",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Le%20LOV%20%C3%A0%20Villeurbanne%20%28mai%202019%29.jpg"
+    },
+    {
+        itemLabel: "/usr/space",
+        geo: [47.92305, 16.21173],
+        countryLabel: "Autriche",
+        inception: "2017-05-01",
+        website: "https://usrspace.at/"
+    },
+    {
+        itemLabel: "Labitat",
+        geo: [55.6763, 12.5455],
+        countryLabel: "Danemark",
+        inception: "2009-01-01"
+    },
+    {
+        itemLabel: "Chaostreff Dortmund",
+        geo: [51.527611111, 7.464944444],
+        countryLabel: "Allemagne",
+        website: "https://www.chaostreff-dortmund.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Ctdo%20DSC03785%20smial%20wp.jpg"
+    },
+    {
+        itemLabel: "Green hackerspace in Minsk",
+        geo: [53.9430181, 27.5977514],
+        countryLabel: "Biélorussie",
+        inception: "2014-05-01",
+        website: "https://hackerspace.by/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Common%20atmosphere%20in%20hackerspace.JPG"
+    },
+    {
+        itemLabel: "Omega verksted",
+        geo: [63.418611111, 10.402047222],
+        countryLabel: "Norvège",
+        website: "https://omegav.no/"
+    },
+    {
+        itemLabel: "DevLoL",
+        geo: [48.305825, 14.283852],
+        countryLabel: "Autriche",
+        inception: "2012-10-18",
+        website: "https://devlol.org/"
+    },
+    {
+        itemLabel: "realraum",
+        geo: [47.065611111, 15.450611111],
+        countryLabel: "Autriche",
+        inception: "2007-03-01",
+        website: "https://r3.at",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Electronics%20Lab%20in%20realraum.jpg"
+    },
+    {
+        itemLabel: "Makerspace Bonn",
+        geo: [50.6981538, 7.14515],
+        countryLabel: "Allemagne",
+        inception: "2018-03-03",
+        website: "https://makerspacebonn.de/"
+    },
+    {
+        itemLabel: "Coredump",
+        geo: [47.225086388, 8.833906388],
+        countryLabel: "Suisse",
+        inception: "2013-08-26",
+        website: "https://www.coredump.ch/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Coredump%20Makerspace%20Platz.jpg"
+    },
+    {
+        itemLabel: "Q118395553",
+        geo: [22.76182, 120.3803],
+        countryLabel: "Taïwan"
+    },
+    {
+        itemLabel: "h´eck",
+        geo: [49.27928, 7.03575],
+        countryLabel: "Allemagne",
+        website: "https://www.hacksaar.de/"
+    },
+    {
+        itemLabel: "Errors Party",
+        geo: [60.523822222, 5.225197222],
+        countryLabel: "Norvège",
+        inception: "1994-01-01",
+        website: "https://errorsparty.no/"
+    },
+    {
+        itemLabel: "AfRA",
+        geo: [52.5082304, 13.4961132],
+        countryLabel: "Allemagne",
+        inception: "2013-06-29",
+        website: "https://www.afra-berlin.de",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/AfRA%20%28Hackerspace%29%20in%20der%20Margaretenstra%C3%9Fe%2030%20in%20Berlin-Lichtenberg.jpg"
+    },
+    {
+        itemLabel: "Hacker Dojo",
+        geo: [37.396111111, -122.049166666],
+        countryLabel: "États-Unis",
+        inception: "2009-08-17",
+        website: "http://www.hackerdojo.com/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Dojo855Front.jpg"
+    },
+    {
+        itemLabel: "NYC Resistor",
+        geo: [40.6837, -73.9816],
+        countryLabel: "États-Unis",
+        inception: "2008-01-01",
+        website: "http://nycresistor.com/"
+    },
+    {
+        itemLabel: "Eigenbaukombinat",
+        geo: [51.4799, 11.9923],
+        countryLabel: "Allemagne",
+        website: "https://www.eigenbaukombinat.de/"
+    },
+    {
+        itemLabel: "RaumZeitLabor",
+        geo: [49.5074245, 8.5206511],
+        countryLabel: "Allemagne",
+        inception: "2010-04-25",
+        website: "https://raumzeitlabor.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/RaumZeitLabor%20Stairs.jpg"
+    },
+    {
+        itemLabel: "TOG",
+        geo: [53.33013, -6.34605],
+        countryLabel: "Irlande",
+        inception: "2009-01-21",
+        website: "http://www.tog.ie"
+    },
+    {
+        itemLabel: "Chaosdorf",
+        geo: [51.212627, 6.799648],
+        countryLabel: "Allemagne",
+        inception: "2001-04-24",
+        website: "https://chaosdorf.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/D%C3%BCsseldorf%2C%20H%C3%BCttenstra%C3%9Fe%2025%2C%20CCC%20Chaosdorf%2025%2C%20M%C3%A4rz%202015%20%281%29.jpg"
+    },
+    {
+        itemLabel: "Chaos Computer Club Dresden",
+        geo: [51.08108, 13.72857],
+        countryLabel: "Allemagne",
+        inception: "2005-08-30",
+        website: "https://c3d2.de/"
+    },
+    {
+        itemLabel: "U.10 Makerspace",
+        geo: [49.6277526, 8.3563928],
+        countryLabel: "Allemagne",
+        inception: "2024-02-22",
+        website: "https://u10.makercloud.de",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/U.10%20Makerspace%20in%20Worms%20Logo.svg"
+    },
+    {
+        itemLabel: "Krautspace",
+        geo: [50.9292094, 11.5825822],
+        countryLabel: "Allemagne",
+        inception: "2012-12-01",
+        website: "https://kraut.space"
+    },
+    {
+        itemLabel: "CoMakingSpace",
+        geo: [49.40831, 8.64622],
+        countryLabel: "Allemagne",
+        inception: "2017-08-08",
+        website: "https://www.comaking.space/"
+    },
+    {
+        itemLabel: "S P A C E",
+        geo: [50.68967, 10.9351],
+        countryLabel: "Allemagne",
+        website: "https://ilmspace.de"
+    },
+    {
+        itemLabel: "HackBo",
+        geo: [4.63137, -74.06589],
+        countryLabel: "Colombie",
+        inception: "2010-12-09",
+        website: "https://hackbo.org"
+    },
+    {
+        itemLabel: "Access Space",
+        geo: [53.37608, -1.46762],
+        countryLabel: "Royaume-Uni"
+    },
+    {
+        itemLabel: "base48",
+        geo: [49.224238888, 16.59555],
+        countryLabel: "Tchéquie",
+        website: "https://base48.cz/"
+    },
+    {
+        itemLabel: "temporaerhaus",
+        geo: [48.3962895, 10.0019903],
+        countryLabel: "Allemagne",
+        inception: "2016-07-01",
+        website: "https://temporaerhaus.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Tempor%C3%A4rhaus%20-%20Schaufenster.jpg"
+    },
+    {
+        itemLabel: "UN-Hack-Bar",
+        geo: [51.53784565, 7.673178851],
+        countryLabel: "Allemagne",
+        inception: "2018-01-01",
+        website: "https://www.un-hack-bar.de/"
+    },
+    {
+        itemLabel: "z-Labor",
+        geo: [50.722777777, 12.48],
+        countryLabel: "Allemagne",
+        inception: "2015-09-20",
+        website: "https://www.z-labor.space/"
+    },
+    {
+        itemLabel: "Chaospott",
+        geo: [51.4385004, 7.0249425],
+        countryLabel: "Allemagne",
+        inception: "2010-09-15",
+        website: "https://www.chaospott.de",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/C3e-2016-og-flur-01.jpg"
+    },
+    {
+        itemLabel: "SLUB Makerspace",
+        geo: [51.03002, 13.7382],
+        countryLabel: "Allemagne",
+        website: "https://www.slub-dresden.de/mitmachen/slub-makerspace",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/2016%2009%20UJ%20Meet%20Up%20Makerspace%20%28c%29%20Lukas%20Boxberger.jpg"
+    },
+    {
+        itemLabel: "X-Hain",
+        geo: [52.5128128, 13.4494645],
+        countryLabel: "Allemagne",
+        inception: "2016-05-01",
+        website: "https://x-hain.de"
+    },
+    {
+        itemLabel: "Indulo",
+        geo: [45.76152, 4.9155],
+        countryLabel: "France",
+        website: "https://indulo.universite-lyon.fr/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Indulo%20%C3%A0%20Villeurbanne%20en%20janvier%202024.JPG"
+    },
+    {
+        itemLabel: "IT-Syndikat",
+        geo: [47.2575, 11.396111111],
+        countryLabel: "Autriche",
+        inception: "2010-10-01",
+        website: "https://it-syndikat.org/"
+    }
+
+            {
+                itemLabel: "Green hackerspace in Minsk",
+                geo: [53.9430181, 27.5977514],
+                countryLabel: "Biélorussie",
+                inception: "2014-05-01",
+                website: "https://hackerspace.by/",
+                image: "http://commons.wikimedia.org/wiki/Special:FilePath/Common%20atmosphere%20in%20hackerspace.JPG"
+            },
+            {
+                itemLabel: "Green hackerspace in Minsk",
+                geo: [53.9430181, 27.5977514],
+                countryLabel: "Biélorussie",
+                inception: "2014-05-01",
+                website: "https://hackerspace.by/",
+                image: "http://commons.wikimedia.org/wiki/Special:FilePath/Drone%20prototype.JPG"
+            },
+            {
+                itemLabel: "Green hackerspace in Minsk",
+                geo: [53.9430181, 27.5977514],
+                countryLabel: "Biélorussie",
+                inception: "2014-05-01",
+                website: "https://hackerspace.by/",
+                image: "http://commons.wikimedia.org/wiki/Special:FilePath/Lvee%20guy%20in%20hackerspace.JPG"
+            },
+            {
+                itemLabel: "Omega verksted",
+                geo: [63.418611111, 10.402047222],
+                countryLabel: "Norvège",
+                website: "https://omegav.no/"
+            },
+            {
+                itemLabel: "DevLoL",
+                geo: [48.305825, 14.283852],
+                countryLabel: "Autriche",
+                inception: "2012-10-18",
+                website: "https://devlol.org/"
+            },
+            {
+                itemLabel: "DevLoL",
+                geo: [48.305825, 14.283852],
+                countryLabel: "Autriche",
+                inception: "2012-10-18",
+                website: "https://www.devlol.org/"
+            },
+            {
+                itemLabel: "realraum",
+                geo: [47.065611111, 15.450611111],
+                countryLabel: "Autriche",
+                inception: "2007-03-01",
+                website: "https://r3.at",
+                image: "http://commons.wikimedia.org/wiki/Special:FilePath/Electronics%20Lab%20in%20realraum.jpg"
+            },
+            {
+                itemLabel: "realraum",
+                geo: [47.065611111, 15.450611111],
+                countryLabel: "Autriche",
+                inception: "2007-03-01",
+                website: "https://realraum.at",
+                image: "http://commons.wikimedia.org/wiki/Special:FilePath/Electronics%20Lab%20in%20realraum.jpg"
+            },
+            {
+                itemLabel: "realraum",
+                geo: [47.065611111, 15.450611111],
+                countryLabel: "Autriche",
+                inception: "2007-03-01",
+                website: "https://wp.realraum.at/",
+                image: "http://commons.wikimedia.org/wiki/Special:FilePath/Electronics%20Lab%20in%20realraum.jpg"
+            },
+            {
+                itemLabel: "Makerspace Bonn",
+                geo: [50.6981538, 7.14515],
+                countryLabel: "Allemagne",
+                inception: "2018-03-03",
+                website: "https://makerspacebon
+            },
+        {
+        itemLabel: "Coredump",
+        geo: [47.225086388, 8.833906388],
+        countryLabel: "Suisse",
+        inception: "2013-08-26",
+        website: "https://www.coredump.ch/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Coredump%20Makerspace%20Platz.jpg"
+    },
+    {
+        itemLabel: "Coredump",
+        geo: [47.225086388, 8.833906388],
+        countryLabel: "Suisse",
+        inception: "2013-08-26",
+        website: "https://www.coredump.ch/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Entrance%20of%20Coredump%20hackerspace-makerspace.jpg"
+    },
+    {
+        itemLabel: "Q118395553",
+        geo: [22.76182, 120.3803],
+        countryLabel: "Taïwan"
+    },
+    {
+        itemLabel: "h´eck",
+        geo: [49.27928, 7.03575],
+        countryLabel: "Allemagne",
+        website: "https://www.hacksaar.de/"
+    },
+    {
+        itemLabel: "Errors Party",
+        geo: [60.523822222, 5.225197222],
+        countryLabel: "Norvège",
+        inception: "1994-01-01",
+        website: "https://errorsparty.no/"
+    },
+    {
+        itemLabel: "AfRA",
+        geo: [52.5082304, 13.4961132],
+        countryLabel: "Allemagne",
+        inception: "2013-06-29",
+        website: "https://www.afra-berlin.de",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/AfRA%20%28Hackerspace%29%20in%20der%20Margaretenstra%C3%9Fe%2030%20in%20Berlin-Lichtenberg.jpg"
+    },
+    {
+        itemLabel: "Hacker Dojo",
+        geo: [37.396111111, -122.049166666],
+        countryLabel: "États-Unis",
+        inception: "2009-08-17",
+        website: "http://www.hackerdojo.com/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Dojo855Front.jpg"
+    },
+    {
+        itemLabel: "NYC Resistor",
+        geo: [40.6837, -73.9816],
+        countryLabel: "États-Unis",
+        inception: "2008-01-01",
+        website: "http://nycresistor.com/"
+    },
+    {
+        itemLabel: "Eigenbaukombinat",
+        geo: [51.4799, 11.9923],
+        countryLabel: "Allemagne",
+        website: "https://www.eigenbaukombinat.de/"
+    },
+    {
+        itemLabel: "RaumZeitLabor",
+        geo: [49.5074245, 8.5206511],
+        countryLabel: "Allemagne",
+        inception: "2010-04-25",
+        website: "https://raumzeitlabor.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/RaumZeitLabor%20Stairs.jpg"
+    },
+    {
+        itemLabel: "TOG",
+        geo: [53.33013, -6.34605],
+        countryLabel: "Irlande",
+        inception: "2009-01-21",
+        website: "http://www.tog.ie"
+    },
+    {
+        itemLabel: "Association for Development of ‘do-it-yourself’ Culture – Makerspace",
+        geo: [45.813776537, 15.882048148],
+        countryLabel: "Croatie",
+        inception: "2011-01-01",
+        website: "https://radiona.org/"
+    },
+    {
+        itemLabel: "Chaosdorf",
+        geo: [51.212627, 6.799648],
+        countryLabel: "Allemagne",
+        inception: "2001-04-24",
+        website: "https://chaosdorf.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/D%C3%BCsseldorf%2C%20H%C3%BCttenstra%C3%9Fe%2025%2C%20CCC%20Chaosdorf%2025%2C%20M%C3%A4rz%202015%20%281%29.jpg"
+    },
+    {
+        itemLabel: "Chaos Computer Club Dresden",
+        geo: [51.08108, 13.72857],
+        countryLabel: "Allemagne",
+        inception: "2005-08-30",
+        website: "https://c3d2.de/"
+    },
+    {
+        itemLabel: "U.10 Makerspace",
+        geo: [49.6277526, 8.3563928],
+        countryLabel: "Allemagne",
+        inception: "2024-02-22",
+        website: "https://u10.makercloud.de",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/U.10%20Makerspace%20in%20Worms%20Logo.svg"
+    },
+    {
+        itemLabel: "Krautspace",
+        geo: [50.9292094, 11.5825822],
+        countryLabel: "Allemagne",
+        inception: "2012-12-01",
+        website: "https://kraut.space"
+    },
+    {
+        itemLabel: "CoMakingSpace",
+        geo: [49.40831, 8.64622],
+        countryLabel: "Allemagne",
+        inception: "2017-08-08",
+        website: "https://www.comaking.space/"
+    },
+    {
+        itemLabel: "S P A C E",
+        geo: [50.68967, 10.9351],
+        countryLabel: "Allemagne",
+        website: "https://ilmspace.de"
+    },
+    {
+        itemLabel: "HackBo",
+        geo: [4.63137, -74.06589],
+        countryLabel: "Colombie",
+        inception: "2010-12-09",
+        website: "https://hackbo.org"
+    },
+    {
+        itemLabel: "Access Space",
+        geo: [53.37608, -1.46762],
+        countryLabel: "Royaume-Uni"
+    },
+    {
+        itemLabel: "base48",
+        geo: [49.224238888, 16.59555],
+        countryLabel: "Tchéquie",
+        website: "https://base48.cz/"
+    },
+    {
+        itemLabel: "temporaerhaus",
+        geo: [48.3962895, 10.0019903],
+        countryLabel: "Allemagne",
+        inception: "2016-07-01",
+        website: "https://temporaerhaus.de/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Tempor%C3%A4rhaus%20-%20Schaufenster.jpg"
+    },
+    {
+        itemLabel: "UN-Hack-Bar",
+        geo: [51.53784565, 7.673178851],
+        countryLabel: "Allemagne",
+        inception: "2018-01-01",
+        website: "https://www.un-hack-bar.de/"
+    },
+    {
+        itemLabel: "z-Labor",
+        geo: [50.722777777, 12.48],
+        countryLabel: "Allemagne",
+        inception: "2015-09-20",
+        website: "https://www.z-labor.space/"
+    },
+    {
+        itemLabel: "Chaospott",
+        geo: [51.4385004, 7.0249425],
+        countryLabel: "Allemagne",
+        inception: "2010-09-15",
+        website: "https://www.chaospott.de",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/C3e-2016-og-flur-01.jpg"
+    },
+    {
+        itemLabel: "Coredump",
+        geo: [47.225086388, 8.833906388],
+        countryLabel: "Suisse",
+        inception: "2013-08-26",
+        website: "https://www.coredump.ch/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Soldering%20stations%20at%20Coredump%20Hackerspace.jpg"
+    },
+    {
+        itemLabel: "SLUB Makerspace",
+        geo: [51.03002, 13.7382],
+        countryLabel: "Allemagne",
+        website: "https://www.slub-dresden.de/mitmachen/slub-makerspace",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/2016%2009%20UJ%20Meet%20Up%20Makerspace%20%28c%29%20Lukas%20Boxberger.jpg"
+    },
+    {
+        itemLabel: "X-Hain",
+        geo: [52.5128128, 13.4494645],
+        countryLabel: "Allemagne",
+        inception: "2016-05-01",
+        website: "https://x-hain.de"
+    },
+    {
+        itemLabel: "Indulo",
+        geo: [45.76152, 4.9155],
+        countryLabel: "France",
+        website: "https://indulo.universite-lyon.fr/",
+        image: "http://commons.wikimedia.org/wiki/Special:FilePath/Indulo%20%C3%A0%20Villeurbanne%20en%20janvier%202024.JPG"
+    },
+    {
+        itemLabel: "IT-Syndikat",
+        geo: [47.2575, 11.396111111],
+        countryLabel: "Autriche",
+        inception: "2010-10-01",
+        website: "https://it-syndikat.org/"
+    }
         ];
 
         // Initialize the map
-        const map = L.map('map').setView([0, 0], 2);
+        const map = L.map('map').setView([20, 0], 2);
 
         // Add a base layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-     // Function to determine marker color based on inception date
-function getColor(inception) {
-    const year = new Date(inception).getFullYear();
-    if (year < 2000) return 'purple';
-    if (year < 2005) return 'blue';
-    if (year < 2010) return 'red';
-    if (year < 2015) return 'orange';
-    if (year < 2020) return 'yellow';
-    return 'green';
-}
+        // Function to determine marker color based on inception date
+        function getColor(inception) {
+            const year = new Date(inception).getFullYear();
+            if (year < 2000) return 'purple';
+            if (year < 2005) return 'blue';
+            if (year < 2010) return 'red';
+            if (year < 2015) return 'orange';
+            if (year < 2020) return 'yellow';
+            return 'green';
+        }
 
         // Add markers to the map
         data.forEach(item => {
