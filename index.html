@@ -616,7 +616,7 @@
     }
 
     {
-             itemLabel: "Green hackerspace in Minsk",
+        itemLabel: "Green hackerspace in Minsk",
                 geo: [53.9430181, 27.5977514],
                 countryLabel: "Biélorussie",
                 inception: "2014-05-01",
@@ -848,6 +848,82 @@
         website: "https://it-syndikat.org/"
     }
         ];
+
+        // Initialize the map
+        const map = L.map('map').setView([20, 0], 2);
+
+        // Add a base layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Function to determine marker color based on inception date
+        function getColor(inception) {
+            const year = new Date(inception).getFullYear();
+            if (year < 2000) return 'purple';
+            if (year < 2005) return 'blue';
+            if (year < 2010) return 'red';
+            if (year < 2015) return 'orange';
+            if (year < 2020) return 'yellow';
+            return 'green';
+        }
+
+        // Add markers to the map
+        data.forEach(item => {
+            const { itemLabel, geo, countryLabel, inception, website, image } = item;
+            const color = getColor(inception);
+
+            const marker = L.circleMarker(geo, {
+                color: color,
+                radius: 8,
+                fillOpacity: 0.7
+            }).addTo(map);
+
+            const popupContent = `
+                <div class="popup-content">
+                    <h3>${itemLabel}</h3>
+                    <p><strong>Country:</strong> ${countryLabel}</p>
+                    <p><strong>Inception:</strong> ${inception}</p>
+                    <p><a href="${website}" target="_blank">Website</a></p>
+                    ${image ? `<img src="${image}" alt="${itemLabel}">` : ''}
+                </div>
+            `;
+            marker.bindPopup(popupContent);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Hackerspace Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        .popup-content img {
+            max-width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Hackerspace Map</h1>
+    <p>Cette carte interactive montre les hackerspaces à travers le monde, colorés en fonction de leur date de création. Cliquez sur les points pour plus d'informations.</p>
+    <div id="map"></div>
+
+   
 
         // Initialize the map
         const map = L.map('map').setView([20, 0], 2);
