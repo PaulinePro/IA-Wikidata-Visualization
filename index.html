@@ -945,23 +945,35 @@
     <h2>Generate Your Own Visualizations</h2>
     <p>Upload a CSV file to generate visualizations of hackerspace data.</p>
     <input type="file" id="csv-upload" accept=".csv">
-    <div id="chart-container">
+    <button id="generate-chart">Generate Chart</button>
+    <div id="chart-container" style="display:none;">
         <canvas id="myChart"></canvas>
     </div>
-</section>
+</section> 
 <script>
-    // CSV upload and Chart.js integration
+    let uploadedData = null;
+
+    // CSV upload and data parsing
     document.getElementById('csv-upload').addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const text = e.target.result;
-                const data = parseCSV(text);
-                const countryCount = countHackerspacesByCountry(data);
-                generateChart(countryCount);
+                uploadedData = parseCSV(text);
             };
             reader.readAsText(file);
+        }
+    });
+
+    // Generate chart on button click
+    document.getElementById('generate-chart').addEventListener('click', function() {
+        if (uploadedData) {
+            const countryCount = countHackerspacesByCountry(uploadedData);
+            generateChart(countryCount);
+            document.getElementById('chart-container').style.display = 'block';
+        } else {
+            alert('Please upload a CSV file first.');
         }
     });
 
