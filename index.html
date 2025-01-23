@@ -2,13 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Hackerspace Map</title>
+    <title>Interactive Hackerspace Visualization</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header, section {
+            text-align: center;
+            margin: 20px;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.2em;
+            color: #777;
+        }
+        #wordcloud img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
         #map {
             height: 600px;
             width: 100%;
+            margin: 20px 0;
+        }
+        .definition {
+            text-align: center;
+            margin: 20px;
+            font-size: 1.2em;
         }
         .popup-content img {
             max-width: 100%;
@@ -19,9 +50,28 @@
     </style>
 </head>
 <body>
-    <h1>Interactive Hackerspace Map</h1>
-    <p>Cette carte interactive montre les hackerspaces à travers le monde, colorés en fonction de leur date de création. Cliquez sur les points pour plus d'informations.</p>
-    <div id="map"></div>
+    <header>
+        <h1>Interactive Hackerspace Visualization</h1>
+        <p>Explore the world of hackerspaces with an interactive map and a word cloud representation.</p>
+    </header>
+
+    <section id="wordcloud">
+        <h2>Word Cloud of Hackerspace Names</h2>
+        <p>This word cloud shows the most frequent words in the names of hackerspaces. The bigger the word, the more frequently it appears.</p>
+        <!-- Add your word cloud image or embed code here -->
+        <img src="path_to_your_wordcloud_image.png" alt="Word Cloud of Hackerspace Names">
+    </section>
+
+    <section id="definition">
+        <h2>What is a Hackerspace?</h2>
+        <p>A hackerspace (also referred to as a hacklab, makerspace or hackspace) is a community-operated, often non-profit, workspace where people with common interests, such as computing, technology, science, digital art or electronic art, can meet, socialize and collaborate. Hackerspaces can be viewed as open community labs incorporating elements of machine shops, workshops and/or studios where hackers can come together to share resources and knowledge to build and make things.</p>
+    </section>
+
+    <section id="map-section">
+        <h2>Interactive Hackerspace Map</h2>
+        <p>This interactive map shows hackerspaces around the world, color-coded by their date of creation. Click on the points for more information.</p>
+        <div id="map"></div>
+    </section>
 
     <script>
          // Data from the SPARQL query
@@ -893,4 +943,3 @@
     </script>
 </body>
 </html>
-
