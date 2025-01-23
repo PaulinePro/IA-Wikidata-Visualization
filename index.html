@@ -941,5 +941,80 @@
             marker.bindPopup(popupContent);
         });
     </script>
+<section id="chart-section">
+    <h2>Generate Your Own Visualizations</h2>
+    <p>Upload a CSV file to generate visualizations of hackerspace data.</p>
+    <input type="file" id="csv-upload" accept=".csv">
+    <div id="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+</section>
+<script>
+    // CSV upload and Chart.js integration
+    document.getElementById('csv-upload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const data = parseCSV(text);
+                const countryCount = countHackerspacesByCountry(data);
+                generateChart(countryCount);
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    function parseCSV(text) {
+        const rows = text.split('\n').map(row => row.split(','));
+        const headers = rows[0];
+        const data = rows.slice(1).map(row => {
+            return row.reduce((obj, value, index) => {
+                obj[headers[index].trim()] = value.trim();
+                return obj;
+            }, {});
+        });
+        return data;
+    }
+
+    function countHackerspacesByCountry(data) {
+        const countryCount = {};
+        data.forEach(item => {
+            const country = item['countryLabel'];
+            if (country) {
+                countryCount[country] = (countryCount[country] || 0) + 1;
+            }
+        });
+        return countryCount;
+    }
+
+    function generateChart(countryCount) {
+        const labels = Object.keys(countryCount);
+        const values = Object.values(countryCount);
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Hackerspaces',
+                    data: values,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>
