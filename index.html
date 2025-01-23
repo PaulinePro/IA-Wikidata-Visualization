@@ -48,6 +48,34 @@
             display: block;
             margin: 0 auto;
         }
+        /* Style pour le conteneur de la légende */
+#legend-container {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+#legend-container h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.color-box {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 10px;
+    border: 1px solid #000;
+}
     </style>
 </head>
 <body>
@@ -67,6 +95,23 @@
         <h2>What is a Hackerspace?</h2>
         <p>A hackerspace (also referred to as a hacklab, makerspace or hackspace) is a community-operated, often non-profit, workspace where people with common interests, such as computing, technology, science, digital art or electronic art, can meet, socialize and collaborate. Hackerspaces can be viewed as open community labs incorporating elements of machine shops, workshops and/or studios where hackers can come together to share resources and knowledge to build and make things.</p>
     </section>
+    <section id="map-section">
+    <h2>Interactive Hackerspace Map</h2>
+    <p>This interactive map shows hackerspaces around the world, color-coded by their date of creation. Click on the points for more information.</p>
+    
+    <!-- Conteneur pour la légende -->
+    <div id="legend-container">
+        <h3>Legend</h3>
+        <div class="legend-item"><span class="color-box" style="background: purple;"></span> Before 2000</div>
+        <div class="legend-item"><span class="color-box" style="background: blue;"></span> 2000 - 2004</div>
+        <div class="legend-item"><span class="color-box" style="background: red;"></span> 2005 - 2009</div>
+        <div class="legend-item"><span class="color-box" style="background: orange;"></span> 2010 - 2014</div>
+        <div class="legend-item"><span class="color-box" style="background: yellow;"></span> 2015 - 2019</div>
+        <div class="legend-item"><span class="color-box" style="background: green;"></span> 2020 and later</div>
+    </div>
+    
+    <div id="map"></div>
+</section>
 
     <section id="map-section">
         <h2>Interactive Hackerspace Map</h2>
