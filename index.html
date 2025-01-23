@@ -949,7 +949,8 @@
     <div id="chart-container" style="display:none;">
         <canvas id="myChart"></canvas>
     </div>
-</section> 
+    <div id="message"></div>
+</section>
 <script>
     let uploadedData = null;
 
@@ -961,6 +962,8 @@
             reader.onload = function(e) {
                 const text = e.target.result;
                 uploadedData = parseCSV(text);
+                document.getElementById('message').textContent = 'File uploaded successfully. Click "Generate Chart" to visualize the data.';
+                document.getElementById('message').style.color = 'green';
             };
             reader.readAsText(file);
         }
@@ -970,10 +973,18 @@
     document.getElementById('generate-chart').addEventListener('click', function() {
         if (uploadedData) {
             const countryCount = countHackerspacesByCountry(uploadedData);
-            generateChart(countryCount);
-            document.getElementById('chart-container').style.display = 'block';
+            if (Object.keys(countryCount).length > 0) {
+                generateChart(countryCount);
+                document.getElementById('chart-container').style.display = 'block';
+                document.getElementById('message').textContent = 'Chart generated successfully.';
+                document.getElementById('message').style.color = 'green';
+            } else {
+                document.getElementById('message').textContent = 'No data available to generate chart.';
+                document.getElementById('message').style.color = 'red';
+            }
         } else {
-            alert('Please upload a CSV file first.');
+            document.getElementById('message').textContent = 'Please upload a CSV file first.';
+            document.getElementById('message').style.color = 'red';
         }
     });
 
