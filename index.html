@@ -48,11 +48,13 @@
             display: block;
             margin: 0 auto;
         }
-        /* Style pour le conteneur de la légende */
 #legend-container {
     text-align: center;
     margin-bottom: 20px;
     font-size: 14px;
+    border: 2px solid black; /* Ajouter une bordure en gras */
+    padding: 10px; /* Ajouter un peu de padding pour l'espacement interne */
+    display: inline-block; /* Pour que la bordure entoure uniquement le contenu de la légende */
 }
 
 #legend-container h3 {
@@ -61,12 +63,13 @@
     font-size: 16px;
     margin-bottom: 10px;
 }
+
 .legend-item {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 5px;
-    height: 25px;
+    height: 25px; /* Uniformiser la hauteur */
 }
 
 .color-box {
@@ -75,6 +78,7 @@
     display: inline-block;
     margin-right: 10px;
     border: 1px solid #000;
+    flex-shrink: 0; /* Empêcher la boîte de couleur de se rétrécir */
 }
     </style>
 </head>
